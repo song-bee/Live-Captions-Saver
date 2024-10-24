@@ -19,7 +19,7 @@
             /* Adjust as needed */
         }
 
-        button {
+        button, select {
             margin: 10px;
             padding: 10px 20px;
             font-size: 16px;
@@ -42,19 +42,36 @@
         #saveButton:hover {
             background-color: #1e7e34;
         }
+
+        select {
+            width: 80%;
+            color: #333;
+            background-color: white;
+            border: 1px solid #007BFF;
+        }
+
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
         span {
             font-size: 12px;
             color: #6c757d;
-            padding:30px;
+            padding: 30px;
         }
     </style>
     <script src="popup.js" defer></script>
 </head>
 
 <body>
-    <h2 id="popup-header">Captions Saver v3</h2>
+    <h2 id="popup-header">Captions Saver v4</h2>
     <h3><i>New Teams Only</i></h3>
     <span>To start, click More > Language and Speech > Turn on live captions</span>
+    <select id="captionFormat">
+        <option value="speakerGrouped">Speaker-Grouped Transcript</option>
+        <option value="timelineSequential">Timeline-Sequential Transcript</option>
+    </select>
     <button id="saveButton">Save Captions</button>
 </body>
 

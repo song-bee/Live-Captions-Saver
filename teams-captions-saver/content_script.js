@@ -29,14 +29,24 @@ function checkCaptions() {
                         Time,
                         ID
                     };
+                    console.log(
+                        "=",
+                        index,
+                        Text,
+                        Name,
+                        Time,
+                        ID
+                    );
                 }
             } else {
-                console.log({
-                    Name,
+                console.log(
+                    "+",
+                    transcriptArray.length + 1,
                     Text,
+                    Name,
                     Time,
                     ID
-                });
+                );
                 // Add new transcript
                 transcriptArray.push({
                     Name,
@@ -85,7 +95,7 @@ startTranscription();
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     switch (request.message) {  // message from service_worker.js      
         case 'return_transcript': // message from service_worker.js
-            console.log("response:", transcriptArray);
+            console.log("response:", transcriptArray.length);
             if (!capturing) {
                 alert("Oops! No captions were captured. Please, try again.");
                 return;
@@ -95,7 +105,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             chrome.runtime.sendMessage({
                 message: "download_captions",
                 transcriptArray: transcriptArray,
-                meetingTitle: meetingTitle
+                meetingTitle: meetingTitle,
+                format: request.format
             });
 
 

@@ -5,9 +5,11 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('saveButton').addEventListener('click', function () {
         console.log('save_captions clicked!');
 
-        chrome.runtime.sendMessage({
-            message: "save_captions"
-        });
+        const captionFormat = document.getElementById('captionFormat').value;
 
+        chrome.runtime.sendMessage({
+            message: "save_captions",
+            format: captionFormat
+        });
     });
 });
