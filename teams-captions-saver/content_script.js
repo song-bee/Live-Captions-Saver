@@ -2,6 +2,19 @@ const transcriptArray = [];
 let capturing = false;
 let observer = null;
 
+// Add this function to load stored transcripts when the script starts
+function loadStoredTranscripts() {
+    chrome.storage.local.get(['storedTranscripts'], function(result) {
+        if (result.storedTranscripts) {
+            transcriptArray.push(...result.storedTranscripts);
+            console.log('Loaded stored transcripts:', transcriptArray.length);
+        }
+    });
+}
+
+// Call this function when the script starts
+loadStoredTranscripts();
+
 function checkCaptions() {
     // Teams v2 
     const closedCaptionsContainer = document.querySelector("[data-tid='closed-captions-renderer']")
@@ -14,6 +27,8 @@ function checkCaptions() {
     transcripts.forEach(transcript => {
         const ID = transcript.querySelector('.fui-Flex > .ui-chat__message').id;
         if (transcript.querySelector('.ui-chat__message__author') != null) {
+
+            let updated = false;
             const Name = transcript.querySelector('.ui-chat__message__author').innerText;
             const Text = transcript.querySelector('.fui-StyledText').innerText;
             const Time = new Date().toLocaleTimeString();
@@ -37,6 +52,8 @@ function checkCaptions() {
                         Time,
                         ID
                     );
+
+                    updated = true;
                 }
             } else {
                 console.log(
@@ -54,10 +71,16 @@ function checkCaptions() {
                     Time,
                     ID
                 });
+
+                updated = true;
             }
 
+            if (updated) {
+                // Store updated transcriptArray in local storage
+                chrome.storage.local.set({ 'storedTranscripts': transcriptArray });
+                console.log('Saved stored transcripts:', transcriptArray.length);
+            }
         }
-
     });
 }
 
@@ -109,6 +132,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 format: request.format
             });
 
+
+        case 'clear_transcripts':
+            transcriptArray.length = 0;
+            console.log('Transcripts cleared');
+            break;
 
         default:
             break;

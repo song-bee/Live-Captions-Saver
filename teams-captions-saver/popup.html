@@ -13,7 +13,7 @@
             align-items: center;
             justify-content: center;
             background-color: #f4f4f4;
-            height: 290px;
+            height: 400px;
             /* Adjust as needed */
             width: 320px;
             /* Adjust as needed */
@@ -60,6 +60,14 @@
             color: #6c757d;
             padding: 30px;
         }
+
+        #clearButton {
+            background-color: #dc3545;
+        }
+
+        #clearButton:hover {
+            background-color: #bd2130;
+        }
     </style>
     <script src="popup.js" defer></script>
 </head>
@@ -73,6 +81,7 @@
         <option value="timelineSequential">Timeline-Sequential Transcript</option>
     </select>
     <button id="saveButton">Save Captions</button>
+    <button id="clearButton">Clear Stored Captions</button>
 </body>
 
 </html>

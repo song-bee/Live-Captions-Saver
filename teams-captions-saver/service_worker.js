@@ -65,6 +65,20 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
             console.log("message return_transcript sent!");
             break;
+        case 'clear_captions':
+            console.log('clear_captions triggered!');
+            chrome.storage.local.remove(['storedTranscripts'], function() {
+                console.log('Stored transcripts cleared');
+            });
+            // Notify content script to clear its transcriptArray
+            const [tabClear] = await chrome.tabs.query({
+                active: true,
+                lastFocusedWindow: true
+            });
+            chrome.tabs.sendMessage(tabClear.id, {
+                message: "clear_transcripts"
+            });
+            break;
         default:
             break;
     }

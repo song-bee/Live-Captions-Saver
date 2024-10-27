@@ -12,4 +12,12 @@ document.addEventListener('DOMContentLoaded', function () {
             format: captionFormat
         });
     });
+
+    document.getElementById('clearButton').addEventListener('click', function () {
+        console.log('clear_captions clicked!');
+
+        chrome.runtime.sendMessage({
+            message: "clear_captions"
+        });
+    });
 });
