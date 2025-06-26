@@ -9,51 +9,49 @@ function checkCaptions() {
         // "Please, click 'More' > 'Language and speech' > 'Turn on life captions'"
         return;
     }
-    const transcripts = closedCaptionsContainer.querySelectorAll('.ui-chat__item');
+    const transcripts = closedCaptionsContainer.querySelectorAll('.fui-ChatMessageCompact');
 
     transcripts.forEach(transcript => {
-        const ID = transcript.querySelector('.fui-Flex > .ui-chat__message').id;
-        if (transcript.querySelector('.ui-chat__message__author') != null) {
-            const Name = transcript.querySelector('.ui-chat__message__author').innerText;
-            const Text = transcript.querySelector('.fui-StyledText').innerText;
+        const avatarContainer = transcript.querySelector('[data-lpc-hover-target-id], [data-tid]');
+        const ID = avatarContainer?.getAttribute('data-lpc-hover-target-id')
+            || avatarContainer?.getAttribute('data-tid')
+            || transcript.id;
+
+        const authorEl = transcript.querySelector('.fui-ChatMessageCompact__author');
+        const textEl = transcript.querySelector('[data-tid="closed-caption-text"]');
+
+        if (transcript.querySelector('.fui-ChatMessageCompact__author') != null) {
+
+            const Name = authorEl.innerText.trim();
+            const Text = textEl.innerText.trim();
             const Time = new Date().toLocaleTimeString();
 
             const index = transcriptArray.findIndex(t => t.ID === ID);
 
             if (index > -1) {
                 if (transcriptArray[index].Text !== Text) {
-                    // Update the transcript if text changed
-                    transcriptArray[index] = {
-                        Name,
-                        Text,
-                        Time,
-                        ID
-                    };
+                    transcriptArray[index] = { Name, Text, Time, ID };
                     console.log(
-                        "=",
-                        index,
-                        Text,
-                        Name,
-                        Time,
-                        ID
+                        `%c📝 Updated #%d\n%cText: %s\n%cUser: %s\n%cTime: %s\n%cID: %s`,
+                        "color: orange; font-weight: bold;",
+                        index + 1,
+                        "color: #00bcd4;", Text,
+                        "color: #4caf50;", Name,
+                        "color: #9c27b0;", Time,
+                        "color: gray;", ID
                     );
                 }
             } else {
+                transcriptArray.push({ Name, Text, Time, ID });
                 console.log(
-                    "+",
-                    transcriptArray.length + 1,
-                    Text,
-                    Name,
-                    Time,
-                    ID
+                    `%c🆕 New Entry #%d\n%cText: %s\n%cUser: %s\n%cTime: %s\n%cID: %s`,
+                    "color: green; font-weight: bold;",
+                    transcriptArray.length,
+                    "color: #00bcd4;", Text,
+                    "color: #4caf50;", Name,
+                    "color: #9c27b0;", Time,
+                    "color: gray;", ID
                 );
-                // Add new transcript
-                transcriptArray.push({
-                    Name,
-                    Text,
-                    Time,
-                    ID
-                });
             }
 
         }
